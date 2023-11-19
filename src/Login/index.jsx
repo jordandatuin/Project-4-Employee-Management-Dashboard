@@ -1,3 +1,4 @@
+// Importing necessary modules and components
 import { useState,useEffect } from 'react';
 import { useNavigate,NavLink } from 'react-router-dom';
 
@@ -17,6 +18,12 @@ function Login ()
   // State variables for email and password
   const [useremail, setUserEmail] = useState('');
   const [userpassword, setUserPassword] = useState('');
+
+    // Set the document title
+    useEffect(() => 
+    {
+      document.title = `Login`;
+    }, []);
 
   // Function to handle form submission when login is successful
   const onFinish = async () => 
@@ -135,13 +142,6 @@ function Login ()
     }
   }
 
-
-  // Set the document title
-  useEffect(() => 
-  {
-    document.title = `Login`;
-  }, []);
-
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100">
       <img src={LoginCreateBg} alt="" className="z-n1 position-absolute" />
@@ -245,5 +245,4 @@ function Login ()
     </div>
   );
 };
-
 export default Login;

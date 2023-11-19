@@ -71,7 +71,6 @@ function Table({employees, handleEdit})
 
   useEffect(() => 
   {
-    document.title = "Dashboard";
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE;
 
@@ -125,7 +124,7 @@ function Table({employees, handleEdit})
     });
   };
 
-    // Rendering the component
+  // Rendering the component
   return (
     <>
       <div className="align-items-center justify-content-center table-container">
@@ -242,5 +241,4 @@ function Table({employees, handleEdit})
     </>
   );
 }
-
 export default Table;

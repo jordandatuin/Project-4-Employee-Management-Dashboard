@@ -1,6 +1,6 @@
+// Importing necessary modules and components
 import { useState,useEffect  } from 'react'
 import { useNavigate,NavLink } from 'react-router-dom';
-
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import firebaseConfig from '../FirebaseConfig';
@@ -23,24 +23,32 @@ function CreateAccount ()
 
   const handleToggle = () => 
   {
-    if (type==='password'){
+    if (type==='password')
+    {
        setIcon(eye);
        setType('text')
-    } else {
+    } 
+
+    else 
+    {
        setIcon(eyeOff)
        setType('password')
     }
  }
 
   // State for create new user account
-  // const [accountid, setAccountId] = useState("");
-
   const [account, setAccount] = useState 
   ({
       email: '',
       password: ''
   })
 
+  // Set the document title
+  useEffect(() => 
+  {
+    document.title = `Create new user`;
+  },[]);
+  
   // function to handle adding a new user
   const create_user = (e) => 
   {
@@ -140,77 +148,70 @@ function CreateAccount ()
     }
   };
  
-  // Set the document title
-  useEffect(() => 
-  {
-    document.title = `Create new user`;
-  });
+  return (
+    <>
+      <div className="d-flex flex-column align-items-center justify-content-center min-vh-100">
+      <img src={LoginCreateBg} alt="" className="z-n1 position-absolute" />
+        <div className="card p-xxl-5 shadow-lg">
+          <h1 className="fw-bold mb-3">Create Account</h1>
+          <form>
+            {/* Input fields for employee information */}
+            <label htmlFor="email">Email:</label>
+            <input 
+              name="email" 
+              id="email" 
+              className="form-control" 
+              type="email" 
+              value={account.email}
+              onChange={(e) => 
+                setAccount
+              ({...account,
+                    email: e.target.value
+              })}
+              />
+              <br />
 
-    return (
-      <>
-        <div className="d-flex flex-column align-items-center justify-content-center min-vh-100">
-        <img src={LoginCreateBg} alt="" className="z-n1 position-absolute" />
-          <div className="card p-xxl-5 shadow-lg">
-            <h1 className="fw-bold mb-3">Create Account</h1>
-            <form>
-              {/* Input fields for employee information */}
-              <label htmlFor="email">Email:</label>
-              <input 
-                name="email" 
-                id="email" 
-                className="form-control" 
-                type="email" 
-                value={account.email}
-                onChange={(e) => 
-                  setAccount
-                ({...account,
-                      email: e.target.value
-                })}
+              <label htmlFor="password">Password:</label>
+              <div className="password-input-container">
+                <input
+                  name="password"
+                  id="password"
+                  className="form-control"
+                  type={type}
+                  value={account.password}
+                  onChange={(e) =>
+                    setAccount({
+                      ...account,
+                      password: e.target.value,
+                    })
+                  }
+                  autoComplete="current-password"
                 />
-                <br />
 
-               <label htmlFor="password">Password:</label>
-                <div className="password-input-container">
-                  <input
-                    name="password"
-                    id="password"
-                    className="form-control"
-                    type={type}
-                    value={account.password}
-                    onChange={(e) =>
-                      setAccount({
-                        ...account,
-                        password: e.target.value,
-                      })
-                    }
-                    autoComplete="current-password"
-                  />
+                <span className="password-toggle" onClick={handleToggle}>
+                  <Icon className="absolute mr-10" icon={icon} size={25} />
+                </span>
+                
+              </div>
 
-                  <span className="password-toggle" onClick={handleToggle}>
-                    <Icon className="absolute mr-10" icon={icon} size={25} />
-                  </span>
-                  
-                </div>
-
-                <p className="text-black pt-1">
-                   <small>* Password must be at least 6 characters.</small>
-                  </p>
-                
-              <button 
-                
-                className="btn btn-dark me-2"
-                onClick={create_user}
-                
-              >
-                Register
-              </button>
-              Already have an account?
-              <NavLink className="text-dark" to='/'> Sign In.</NavLink>
-            </form>
-          </div>
+              <p className="text-black pt-1">
+                  <small>* Password must be at least 6 characters.</small>
+                </p>
+              
+            <button 
+              
+              className="btn btn-dark me-2"
+              onClick={create_user}
+              
+            >
+              Register
+            </button>
+            Already have an account?
+            <NavLink className="text-dark" to='/'> Sign In.</NavLink>
+          </form>
         </div>
-      </>
-    )
-  }
-  
+      </div>
+    </>
+  );
+};
 export default CreateAccount;

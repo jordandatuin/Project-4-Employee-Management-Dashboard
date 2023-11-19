@@ -1,8 +1,9 @@
+// Importing necessary modules and components
 import { useEffect  } from 'react'
 import { Link } from 'react-router-dom';
 import ReactiveButton from 'reactive-button';
 
-
+// NotFound component
 function NotFound() {
 
   // useEffect to set the document title when the component mounts
@@ -11,6 +12,7 @@ function NotFound() {
     document.title = `Page Not Found - Activity 14`;
   },[]);
 
+  // Rendering the component
   return (
     <>
       {/* Container for the 404 page */}
@@ -32,7 +34,7 @@ function NotFound() {
          </div>
       </div>
     </>
-  )
-}
-
+  );
+};
+// Exporting the NotFound component as the default export
 export default NotFound;

@@ -1,17 +1,19 @@
+// Importing necessary modules and components
 import { useEffect  } from 'react'
 import { Link } from 'react-router-dom';
 import ReactiveButton from 'reactive-button';
 
-
+// NotLogin component
 function NotLogin() 
 {
 
   // useEffect to set the document title when the component mounts
   useEffect(() => 
   {
-    document.title = `Page Not Found - Activity 14`;
+    document.title = `Not Login`;
   },[]);
 
+  // Rendering the component
   return (
     <>
       {/* Container for the 404 page */}
@@ -33,7 +35,7 @@ function NotLogin()
          </div>
       </div>
     </>
-  )
-}
-
+  );
+};
+// Exporting the NotLogin component as the default export
 export default NotLogin;

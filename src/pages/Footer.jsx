@@ -1,3 +1,4 @@
+// Footer component
 function Footer() 
 {
   return (
@@ -10,7 +11,7 @@ function Footer()
         </div>
       </footer>
     </>
-  )
-}
-  
+  );
+};
+// Exporting the Footer component as the default export
 export default Footer;

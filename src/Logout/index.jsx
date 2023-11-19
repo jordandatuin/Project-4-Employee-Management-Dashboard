@@ -1,4 +1,6 @@
+// Importing necessary modules and components
 import { useNavigate } from 'react-router-dom';
+
 import { getAuth, signOut } from "firebase/auth";
 import firebaseConfig from '../FirebaseConfig';
 
@@ -7,11 +9,13 @@ import { Icon } from '@iconify/react';
 
 function Logout() 
 { 
+  // React router hook to navigate to different pages
   const navigate = useNavigate();
 
   // Show a confirmation dialog using SweetAlert
   const handleLogout = () => 
   {
+    // Show a confirmation dialog using SweetAlert
     Swal.fire
     ({
       icon: 'question',
@@ -36,13 +40,17 @@ function Logout()
           },
           willClose: () => 
           {
+            // Navigate to the home page after successful logout
             navigate('/');
+
+            // Get the authentication instance and sign out the user
             const auth = getAuth(firebaseConfig);
             signOut(auth).then(() => 
             {
               
             }).catch((error) => 
             {
+              // Handle errors if any during the logout process
               const errorCode = error.code;
               const errorMessage = error.message;
               alert(errorCode)
@@ -57,7 +65,7 @@ function Logout()
 
   return (
     <>
-        {/* Render a button with an icon for logging out */}
+      {/* Render a button with an icon for logging out */}
         <span className="mt-1">
           <button className="btn p-0">
             <Icon 
@@ -73,5 +81,4 @@ function Logout()
             
   );
 };
-
 export default Logout;

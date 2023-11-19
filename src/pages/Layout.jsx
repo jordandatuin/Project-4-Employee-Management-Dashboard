@@ -1,7 +1,9 @@
+// Importing necessary modules and components
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
 import Footer from "./Footer.jsx";
 
+// Layout component
 function Layout() 
 {
   return (
@@ -19,7 +21,7 @@ function Layout()
         <Footer />
       </main>
     </>
-  )
-}
-
+  );
+};
+// Exporting the Layout component as the default export
 export default Layout;

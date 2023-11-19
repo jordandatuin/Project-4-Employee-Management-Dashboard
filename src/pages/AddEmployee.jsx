@@ -1,3 +1,4 @@
+// Importing necessary modules and components
 import { useState,useEffect  } from 'react'
 
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -8,6 +9,14 @@ import firebaseConfig from '../FirebaseConfig';
 
 function AddEmployee ({employees})
 { 
+
+    // Set the document title
+    useEffect(() => 
+    {
+      document.title = `Register New Employee`;
+    },[]);
+    
+
     // State for managing the employee data
     const [employee, setEmployee] = useState 
     ({
@@ -45,7 +54,8 @@ function AddEmployee ({employees})
             showConfirmButton: true,
         });
       }
-     
+
+      // Email validation using regex
       const isEmailValid = (email) => 
         {
           // Regular expression for basic email validation
@@ -54,7 +64,7 @@ function AddEmployee ({employees})
           return emailRegex.test(email);
         };
         
-        // Usage:
+        // Check if the email is valid
         const isValid = isEmailValid(employee.email);
         
         if (!isValid) 
@@ -86,13 +96,11 @@ function AddEmployee ({employees})
       };
       
       // Update the employees array and local storage
-
       const db = getFirestore(firebaseConfig);
-
       const employeeId = String(id);
-
       setDoc(doc(db, 'db-ema', employeeId),newEmployee)
     
+      // Clear the form after submitting
       setEmployee
       ({
         firstName: '',
@@ -118,173 +126,165 @@ function AddEmployee ({employees})
       });
     };
     
-    // Set the document title
-    useEffect(() => 
-    {
-      document.title = `Register New Employee`;
-    });
-  
-    return (
-      <>
-        <div className="d-flex flex-column align-items-center justify-content-center m-4">
-          <h1 className="fw-bold mb-3 text-center">Add Employee</h1>
-          <form>
-            {/* Input fields for employee information */}
-            <div className="row mb-3">
-              <div className="col">
-              <label htmlFor="firstname">Fisrt Name:</label>
-              <input 
-              name="firstname" 
-              id="firstname" 
-              className="form-control" 
-              type="text" 
-              placeholder="John"
-              maxLength="25" 
-              value={employee.firstName}
-              onChange={(e) => 
+return (
+    <>
+      <div className="d-flex flex-column align-items-center justify-content-center m-4">
+        <h1 className="fw-bold mb-3 text-center">Add Employee</h1>
+        <form>
+          {/* Input fields for employee information */}
+          <div className="row mb-3">
+            <div className="col">
+            <label htmlFor="firstname">Fisrt Name:</label>
+            <input 
+            name="firstname" 
+            id="firstname" 
+            className="form-control" 
+            type="text" 
+            placeholder="John"
+            maxLength="25" 
+            value={employee.firstName}
+            onChange={(e) => 
+            setEmployee
+            ({...employee,
+              firstName: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
+            })}
+            />
+            </div>
+            <div className="col">
+            <label htmlFor="lastname">Last Name:</label>
+          <input 
+            name="lastname" 
+            id="lastname" 
+            className="form-control" 
+            type="text" 
+            placeholder="Doe"
+            maxLength="25"
+            value={employee.lastName}
+            onChange={(e) => 
               setEmployee
               ({...employee,
-                firstName: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
+                lastName: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
               })}
               />
-              </div>
-              <div className="col">
-              <label htmlFor="lastname">Last Name:</label>
-            <input 
-              name="lastname" 
-              id="lastname" 
-              className="form-control" 
-              type="text" 
-              placeholder="Doe"
-              maxLength="25"
-              value={employee.lastName}
-              onChange={(e) => 
-                setEmployee
-                ({...employee,
-                  lastName: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
-                })}
-                />
-              </div>
             </div>
+          </div>
 
-            <label htmlFor="address">Address:</label>
-            <textarea
-              name="address"
-              id="address"
+          <label htmlFor="address">Address:</label>
+          <textarea
+            name="address"
+            id="address"
+            className="form-control mb-3"
+            maxLength="500"
+            rows="2"
+            value={employee.address}
+            onChange={(e) =>
+              setEmployee({
+                ...employee,
+                address: e.target.value
+              })
+            }
+          />
+
+          <label htmlFor="gender">Gender:</label>
+          <div className="mb-3">
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Male"
+                checked={employee.gender === 'Male'}
+                onChange={(e) => setEmployee({ ...employee, gender: e.target.value })}
+              />
+              Male
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Female"
+                checked={employee.gender === 'Female'}
+                onChange={(e) => setEmployee({ ...employee, gender: e.target.value })}
+              />
+              Female
+            </label>
+          </div>
+
+            <label htmlFor="position">Position:</label>
+            <select
+              name="position"
+              id="position"
               className="form-control mb-3"
-              maxLength="500"
-              rows="2"
-              value={employee.address}
-              onChange={(e) =>
-                setEmployee({
-                  ...employee,
-                  address: e.target.value
-                })
-              }
+              value={employee.position}
+              onChange={(e) => setEmployee({ ...employee, position: e.target.value })}
+            >
+              <option value="">Select Position</option>
+              <option value="Manager">Manager</option>
+              <option value="Developer">Developer</option>
+              <option value="Designer">Designer</option>
+              {/* Add more options as needed */}
+            </select>
+
+          
+          <label htmlFor="email">Email:</label>
+          <input 
+            name="email" 
+            id="email" 
+            className="form-control mb-3" 
+            type="email" 
+            placeholder="JohnDoe@gmail.com"
+            maxLength="25"
+            value={employee.email}
+            onChange={(e) => 
+              setEmployee
+              ({...employee,
+                email: e.target.value
+              })}
+                required
             />
 
-            <label htmlFor="gender">Gender:</label>
-            <div className="mb-3">
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="Male"
-                  checked={employee.gender === 'Male'}
-                  onChange={(e) => setEmployee({ ...employee, gender: e.target.value })}
-                />
-                Male
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="Female"
-                  checked={employee.gender === 'Female'}
-                  onChange={(e) => setEmployee({ ...employee, gender: e.target.value })}
-                />
-                Female
-              </label>
+          <label htmlFor="salary">Salary (₱):</label>
+          <input 
+            name="salary" 
+            id="salary" 
+            className="form-control mb-3" 
+            type="number"
+            max={999999999}
+            min={0}
+            value={employee.salary}
+            onChange={(e) => 
+              setEmployee
+              ({...employee,
+                salary: e.target.value
+              })}
+              />
+
+            <label htmlFor="date">Date hired:</label>
+            <input
+              className="text-black mb-4"
+              id="date"
+              type="date"
+              name="date"
+              value={employee.date}
+              onChange={(e) => 
+                setEmployee
+                ({...employee,
+                  date: e.target.value
+                })}
+            />
+
+            <div className="row">
+                <div className="col d-flex flex-column align-items-center justify-content-center">
+                  <button 
+                    className="btn btn-dark"
+                    onClick={add_employee}
+                  >
+                  Add
+                  </button>
+                </div>
             </div>
-
-              <label htmlFor="position">Position:</label>
-              <select
-                name="position"
-                id="position"
-                className="form-control mb-3"
-                value={employee.position}
-                onChange={(e) => setEmployee({ ...employee, position: e.target.value })}
-              >
-                <option value="">Select Position</option>
-                <option value="Manager">Manager</option>
-                <option value="Developer">Developer</option>
-                <option value="Designer">Designer</option>
-                {/* Add more options as needed */}
-              </select>
-
-            
-            <label htmlFor="email">Email:</label>
-            <input 
-              name="email" 
-              id="email" 
-              className="form-control mb-3" 
-              type="email" 
-              placeholder="JohnDoe@gmail.com"
-              maxLength="25"
-              value={employee.email}
-              onChange={(e) => 
-                setEmployee
-                ({...employee,
-                  email: e.target.value
-                })}
-                 required
-              />
-
-            <label htmlFor="salary">Salary (₱):</label>
-            <input 
-              name="salary" 
-              id="salary" 
-              className="form-control mb-3" 
-              type="number"
-              max={999999999}
-              min={0}
-              value={employee.salary}
-              onChange={(e) => 
-                setEmployee
-                ({...employee,
-                  salary: e.target.value
-                })}
-                />
-
-              <label htmlFor="date">Date hired:</label>
-              <input
-               className="text-black mb-4"
-                id="date"
-                type="date"
-                name="date"
-                value={employee.date}
-                onChange={(e) => 
-                  setEmployee
-                  ({...employee,
-                    date: e.target.value
-                  })}
-              />
-
-              <div className="row">
-                  <div className="col d-flex flex-column align-items-center justify-content-center">
-                    <button 
-                      className="btn btn-dark"
-                      onClick={add_employee}
-                    >
-                    Add
-                    </button>
-                  </div>
-              </div>
-            
-          </form>
-        </div>
-      </>
-    )
-  }
-  
+        </form>
+      </div>
+    </>
+  );
+};
 export default AddEmployee;

@@ -1,8 +1,10 @@
+// Importing necessary modules and components
 import { Link, NavLink } from "react-router-dom";
 
 import Logout from "../Logout";
 import WebLogo from "../assets/web_icon/webicon.svg"
 
+// Navbar component
 function Navbar() 
 {
   return (
@@ -40,7 +42,7 @@ function Navbar()
         </nav>
       </div>
     </>
-  )
-}
-
+  );
+};
+// Exporting the Navbar component as the default export
 export default Navbar;
