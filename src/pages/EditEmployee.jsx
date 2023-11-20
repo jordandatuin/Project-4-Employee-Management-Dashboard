@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import withReactContent from 'sweetalert2-react-content';
 
-import { getFirestore,updateDoc, doc } from "firebase/firestore";
+import { getFirestore,updateDoc, doc, Timestamp } from "firebase/firestore";
 import firebaseConfig from '../FirebaseConfig';
 
 
@@ -141,71 +141,77 @@ function EditEmployee ({selectedEmployee})
       });
     }
 
-    // Create an object with updated employee data
-    const updatedEmployee = 
-    {
-      id: employee.id,
-      firstName: employee.firstName,
-      lastName: employee.lastName,
-      address: employee.address,
-      email: employee.email,
-      salary: employee.salary,
-      date: employee.date,
-      gender: employee.gender,
-      position: employee.position,
-    };
-
-    // Initialize Cloud Firestore and get a reference to the service
-    const db = getFirestore(firebaseConfig);
-
-    const accountidString = String(employee.id);
-    const employeeRef = doc(db, "db-ema", accountidString);
-
-    // Update the employee data in Firestore    
-    updateDoc(employeeRef, 
-    {
-      id: employee.id,
-      firstName: employee.firstName,
-      lastName: employee.lastName,
-      address: employee.address,
-      email: employee.email,
-      salary: employee.salary,
-      date: employee.date,
-      gender: employee.gender,
-      position: employee.position,
-    });
-
-    // Display a success message using SweetAlert
-    const MySwal = withReactContent(Swal);
-    MySwal.fire
+    Swal.fire
     ({
       allowOutsideClick: false,
-      icon: 'success',
-      title: 'Updated!',
-      text: `${updatedEmployee.firstName} ${updatedEmployee.lastName}'s data has been updated.`,
-      confirmButtonColor: '#198754',
-      confirmButtonText: 'Go to Dashboard',
-    }).then((result) => 
-    {
-      if (result.isConfirmed) 
+      icon: 'warning',
+      title: 'Are you sure you want to update employee data?',
+      text: "You won't be able to revert this!",
+      showCancelButton: true,
+      confirmButtonColor: '#860A35',
+      confirmButtonText: 'Yes, update it!',
+      cancelButtonText: 'No, cancel!',
+    }).then(result => 
       {
-        navigate('/dashboard'); // Navigate to the dashboard when the user clicks "Go to Dashboard"
+      if (result.value) 
+      {
+        // Create an object with updated employee data
+        const updatedEmployee = 
+        {
+          id: employee.id,
+          firstName: employee.firstName,
+          lastName: employee.lastName,
+          address: employee.address,
+          email: employee.email,
+          salary: employee.salary,
+          date: employee.date,
+          gender: employee.gender,
+          position: employee.position,
+          dataUpdated: Timestamp.fromDate(new Date())
+        };
+
+        // Initialize Cloud Firestore and get a reference to the service
+        const db = getFirestore(firebaseConfig);
+        const accountidString = String(employee.id);
+        // Update the employee data in Firestore
+        updateDoc(doc(db, "db-ema", accountidString),updatedEmployee);
+
+        // Display a success message using SweetAlert
+        const MySwal = withReactContent(Swal);
+        MySwal.fire
+        ({
+          allowOutsideClick: false,
+          icon: 'success',
+          title: 'Updated!',
+          text: `${updatedEmployee.firstName} ${updatedEmployee.lastName}'s data has been updated.`,
+          confirmButtonColor: '#198754',
+          confirmButtonText: 'Go to Dashboard',
+        }).then((result) => 
+        {
+          if (result.isConfirmed) 
+          {
+            navigate('/dashboard'); // Navigate to the dashboard when the user clicks "Go to Dashboard"
+          }
+        });
+
+        // Clear form after updating
+        setEmployee
+        ({
+          id: '',
+          firstName: '',
+          lastName: '',
+          address: '',
+          email: '',
+          salary: '',
+          date: '',
+          gender: 'Male',
+          position: '',
+        });
       }
     });
 
-    // Clear form after updating
-    setEmployee
-    ({
-      id: '',
-      firstName: '',
-      lastName: '',
-      address: '',
-      email: '',
-      salary: '',
-      date: '',
-      gender: 'Male',
-      position: '',
-    });
+
+    
   };
     
 return (
