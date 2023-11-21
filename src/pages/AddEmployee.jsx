@@ -1,9 +1,10 @@
 // Importing necessary modules and components
 import { useState,useEffect  } from 'react'
+import moment from 'moment';
 
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, Timestamp } from "firebase/firestore";
 import firebaseConfig from '../FirebaseConfig';
 
 
@@ -25,11 +26,12 @@ function AddEmployee ({employees})
         address: '',
         email: '',
         salary:'',
-        date:'',
+        date:moment().format('YYYY-MM-DD'),
         gender: '', 
         position: ''
     })
 
+    
     // Function to handle adding a new employee
     const add_employee = e => 
     {
@@ -91,7 +93,8 @@ function AddEmployee ({employees})
         salary: employee.salary,
         date: employee.date,
         gender: employee.gender, 
-        position: employee.position
+        position: employee.position,
+        dataCreated: Timestamp.fromDate(new Date())
 
       };
       
@@ -264,6 +267,7 @@ return (
               id="date"
               type="date"
               name="date"
+              min={moment().format('YYYY-MM-DD')}
               value={employee.date}
               onChange={(e) => 
                 setEmployee

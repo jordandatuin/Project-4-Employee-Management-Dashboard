@@ -352,6 +352,7 @@ return (
             id="date"
             type="date"
             name="date"
+            readOnly
             value={employee.date}
             onChange={(e) => 
               setEmployee

@@ -22,6 +22,7 @@
     "dotenv": "^16.3.1",
     "firebase": "^10.6.0",
     "mantine-datatable": "^7.1.5",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons-kit": "^2.0.0",
