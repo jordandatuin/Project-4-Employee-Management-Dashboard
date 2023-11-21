@@ -4,6 +4,8 @@
 import { useEffect, useState } from "react";
 import { NavLink } from 'react-router-dom';
 
+import Pie from './Pie'
+
 import { getFirestore, deleteDoc, doc } from "firebase/firestore";
 import firebaseConfig from '../FirebaseConfig';
 
@@ -128,7 +130,14 @@ function Table({employees, handleEdit})
   return (
     <>
       <div className="align-items-center justify-content-center table-container">
-        <h1 className=" display-4 mb-4">Employee List</h1>
+        <div className="row">
+          <div className="col-sm-5">
+          <h1 className="display-4 mb-4">Roles Percentage</h1>
+            <Pie />
+          </div>
+
+          <div className="col-sm-7">
+          <h1 className="display-4 mb-4">Employee List</h1>
         <MantineProvider>
           <DataTable
             borderRadius="sm"
@@ -237,6 +246,8 @@ function Table({employees, handleEdit})
           )}
         </Modal>
         </MantineProvider>
+          </div>
+        </div>
       </div>
     </>
   );
