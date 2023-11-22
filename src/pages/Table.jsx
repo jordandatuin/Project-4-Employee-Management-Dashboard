@@ -150,6 +150,7 @@ function Table({employees, handleEdit})
             paginationActiveBackgroundColor="#212529"
             height={380}
             records={records}
+            noRecordsText="No records to show"
             columns={[
               { accessor: "id", 
                 width: 50,
