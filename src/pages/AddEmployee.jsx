@@ -8,7 +8,7 @@ import { getFirestore, doc, setDoc, Timestamp } from "firebase/firestore";
 import firebaseConfig from '../FirebaseConfig';
 
 
-function AddEmployee ({employees})
+function AddEmployee ({employees, setEmployees})
 { 
 
     // Set the document title
@@ -82,7 +82,13 @@ function AddEmployee ({employees})
 
 
       // Generate a new employee object with an incremented ID
-      const id = employees.length + 1;
+      const generateNewId = () => 
+      {
+        const lastEmployee = employees[employees.length - 1];
+        return lastEmployee ? lastEmployee.id + 1 : 1;
+      };
+      
+      const id = generateNewId();
       const newEmployee = 
       {
         id,
@@ -102,6 +108,7 @@ function AddEmployee ({employees})
       const db = getFirestore(firebaseConfig);
       const employeeId = String(id);
       setDoc(doc(db, 'db-ema', employeeId),newEmployee)
+      setEmployees(newEmployee);
     
       // Clear the form after submitting
       setEmployee
@@ -111,7 +118,7 @@ function AddEmployee ({employees})
         address: '',
         email: '',
         salary: '',
-        date: '',
+        date: moment().format('YYYY-MM-DD'),
         gender: '',
         position: ''
       });
@@ -147,10 +154,10 @@ return (
             maxLength="25" 
             value={employee.firstName}
             onChange={(e) => 
-            setEmployee
-            ({...employee,
-              firstName: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
-            })}
+              setEmployee
+              ({...employee,
+                firstName: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
+              })}
             />
             </div>
             <div className="col">
@@ -181,8 +188,8 @@ return (
             rows="2"
             value={employee.address}
             onChange={(e) =>
-              setEmployee({
-                ...employee,
+              setEmployee
+              ({...employee,
                 address: e.target.value
               })
             }
@@ -196,7 +203,11 @@ return (
                 name="gender"
                 value="Male"
                 checked={employee.gender === 'Male'}
-                onChange={(e) => setEmployee({ ...employee, gender: e.target.value })}
+                onChange={(e) => 
+                  setEmployee
+                  ({...employee, 
+                    gender: e.target.value 
+                  })}
               />
               Male
             </label>
@@ -206,7 +217,11 @@ return (
                 name="gender"
                 value="Female"
                 checked={employee.gender === 'Female'}
-                onChange={(e) => setEmployee({ ...employee, gender: e.target.value })}
+                onChange={(e) => 
+                  setEmployee
+                  ({...employee, 
+                    gender: e.target.value 
+                  })}
               />
               Female
             </label>
@@ -218,7 +233,11 @@ return (
               id="position"
               className="form-control mb-3"
               value={employee.position}
-              onChange={(e) => setEmployee({ ...employee, position: e.target.value })}
+              onChange={(e) => 
+                setEmployee
+                ({...employee, 
+                  position: e.target.value 
+                })}
             >
               <option value="">Select Position</option>
               <option value="Manager">Manager</option>

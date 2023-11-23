@@ -10,7 +10,7 @@ import firebaseConfig from '../FirebaseConfig';
 
 
 
-function EditEmployee ({selectedEmployee})
+function EditEmployee ({selectedEmployee, setEmployees})
 {   
 
   // Create a navigate function from react-router-dom
@@ -175,6 +175,7 @@ function EditEmployee ({selectedEmployee})
         const accountidString = String(employee.id);
         // Update the employee data in Firestore
         updateDoc(doc(db, "db-ema", accountidString),updatedEmployee);
+        setEmployees(updatedEmployee);
 
         // Display a success message using SweetAlert
         const MySwal = withReactContent(Swal);
@@ -251,7 +252,7 @@ return (
             onChange={(e) => 
               setEmployee
               ({...employee,
-              lastName: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
+                lastName: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
               })}
               />
           </div>
@@ -282,7 +283,11 @@ return (
                 name="gender"
                 value="Male"
                 checked={employee.gender === 'Male'}
-                onChange={(e) => setEmployee({ ...employee, gender: e.target.value })}
+                onChange={(e) => 
+                  setEmployee
+                  ({...employee, 
+                    gender: e.target.value 
+                  })}
               />
               Male
             </label>
@@ -292,7 +297,11 @@ return (
                 name="gender"
                 value="Female"
                 checked={employee.gender === 'Female'}
-                onChange={(e) => setEmployee({ ...employee, gender: e.target.value })}
+                onChange={(e) => 
+                  setEmployee
+                  ({...employee, 
+                    gender: e.target.value 
+                  })}
               />
               Female
             </label>
@@ -304,7 +313,11 @@ return (
           id="position"
           className="form-control mb-3"
           value={employee.position}
-          onChange={(e) => setEmployee({ ...employee, position: e.target.value })}
+          onChange={(e) => 
+            setEmployee
+            ({...employee, 
+              position: e.target.value 
+            })}
         >
           <option value="">Select Position</option>
           <option value="Manager">Manager</option>
