@@ -150,13 +150,13 @@ function CreateAccount ()
  
   return (
     <>
-      <div className="d-flex flex-column align-items-center justify-content-center min-vh-100">
-      <img src={LoginCreateBg} alt="" className="z-n1 position-absolute" />
+      <div className="d-flex flex-column align-items-center justify-content-center min-vh-100 p-2">
+      <img src={LoginCreateBg} alt="" className="z-n1 position-absolute img-fluid" />
         <div className="card p-xxl-5 shadow-lg">
           <h1 className="fw-bold mb-3">Create Account</h1>
           <form>
             {/* Input fields for employee information */}
-            <label htmlFor="email">Email:</label>
+            <label htmlFor="email"><span className="text-danger">*</span> Email:</label>
             <input 
               name="email" 
               id="email" 
@@ -171,7 +171,7 @@ function CreateAccount ()
               />
               <br />
 
-              <label htmlFor="password">Password:</label>
+              <label htmlFor="password"><span className="text-danger">*</span> Password:</label>
               <div className="password-input-container">
                 <input
                   name="password"
@@ -194,8 +194,8 @@ function CreateAccount ()
                 
               </div>
 
-              <p className="text-black pt-1">
-                  <small>* Password must be at least 6 characters.</small>
+              <p className="text-black text-center pt-1">
+                  <small>Password must be at least 6 characters.</small>
                 </p>
               
             <button 

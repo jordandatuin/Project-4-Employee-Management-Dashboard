@@ -132,6 +132,8 @@ function Login ()
         .then(() => 
         {
           // Password reset email sent!
+          setUserEmail('');
+          setUserPassword('');
           
         })
         .catch((error) => 
@@ -144,7 +146,7 @@ function Login ()
 
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100">
-      <img src={LoginCreateBg} alt="" className="z-n1 position-absolute" />
+      <img src={LoginCreateBg} alt="" className="z-n1 position-absolute img-fluid" />
         <div className="container-fluid">
           <div className="row d-flex align-items-center justify-content-center">
             <div className="col-sm-3">
