@@ -180,7 +180,7 @@ function Table({employees, handleEdit})
                 filtering: query !== '',
               },
               { accessor: "email", 
-                width: 250,
+                width: 200,
                 textAlign: "center",
               },
               { accessor: "Date hired", 
