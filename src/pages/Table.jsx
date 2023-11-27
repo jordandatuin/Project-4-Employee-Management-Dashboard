@@ -159,7 +159,7 @@ function Table({employees, handleEdit})
               },
               { accessor: "Name",
                 render: ({ firstName, lastName }) => `${firstName} ${lastName}`,
-                width: 200,
+                width: 300,
                 textAlign: "center", 
                 filter: (
                   <TextInput
@@ -180,7 +180,7 @@ function Table({employees, handleEdit})
                 filtering: query !== '',
               },
               { accessor: "email", 
-                width: 200,
+                width: 250,
                 textAlign: "center",
               },
               { accessor: "Date hired", 
