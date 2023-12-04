@@ -2,7 +2,7 @@
 import { useState,useEffect  } from 'react'
 import { useNavigate,NavLink } from 'react-router-dom';
 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword,onAuthStateChanged } from "firebase/auth";
 import firebaseConfig from '../FirebaseConfig';
 
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -47,6 +47,16 @@ function CreateAccount ()
   useEffect(() => 
   {
     document.title = `Create new user`;
+
+    const auth = getAuth(firebaseConfig);
+      onAuthStateChanged(auth, (user)=>
+      {
+        if(user)
+        {
+          navigate('/dashboard');
+        }
+      });
+
   },[]);
   
   // function to handle adding a new user

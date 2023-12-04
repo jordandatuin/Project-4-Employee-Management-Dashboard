@@ -6,6 +6,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 import withReactContent from 'sweetalert2-react-content';
 
 import { getFirestore,updateDoc, doc, Timestamp } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import firebaseConfig from '../FirebaseConfig';
 
 
@@ -14,47 +15,55 @@ function EditEmployee ({selectedEmployee, setEmployees})
 {   
 
   // Create a navigate function from react-router-dom
-  const navigate = useNavigate();
-
-  useEffect(() => 
+  let navigate = useNavigate();
+  const auth = getAuth(firebaseConfig);
+  useEffect(()=> 
   {
-    // Set document title
-    document.title = `Update Employee`;
-    
-    // Check if selectedEmployee is null when rendering
-    if (selectedEmployee === null) 
+    onAuthStateChanged(auth, (user)=>
     {
-      // Redirect to the main page or display an error message
-      navigate('/dashboard');
-      
-      Swal.fire
-      ({
-        timer: 1500,
-        showConfirmButton: false,
-        willOpen: () => 
-        {
-          Swal.showLoading();
-        },
-        willClose: () => 
-        {
-          // Display a success message using SweetAlert
-          Swal.fire
-          ({
-            icon: 'error',
-            title: 'Your refresh the page while updating!',
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        },
-      });
-      return () => {}; 
-    }
-  
-    return () => 
-    {
-      
-    };
-  }, [selectedEmployee, navigate]);
+      if(user) 
+      {
+          // Set document title
+          document.title = `Update Employee`;
+          
+          // Check if selectedEmployee is null when rendering
+          if (selectedEmployee === null) 
+          {
+            // Redirect to the main page or display an error message
+            navigate('/dashboard');
+            
+            Swal.fire
+            ({
+              timer: 1500,
+              showConfirmButton: false,
+              willOpen: () => 
+              {
+                Swal.showLoading();
+              },
+              willClose: () => 
+              {
+                // Display a success message using SweetAlert
+                Swal.fire
+                ({
+                  icon: 'error',
+                  title: 'Your refresh the page while updating!',
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+              },
+            });
+            return () => {}; 
+          }
+      }
+
+      else 
+      {
+        navigate("/");
+      }
+    });
+
+  }, [])
+
 
   // Initialize the state with the initialEmployeeState
   const initialEmployeeState = selectedEmployee

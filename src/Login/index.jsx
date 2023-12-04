@@ -2,7 +2,7 @@
 import { useState,useEffect } from 'react';
 import { useNavigate,NavLink } from 'react-router-dom';
 
-import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail,onAuthStateChanged } from "firebase/auth";
 import firebaseConfig from '../FirebaseConfig';
 
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -23,6 +23,16 @@ function Login ()
     useEffect(() => 
     {
       document.title = `Login`;
+
+      const auth = getAuth(firebaseConfig);
+      onAuthStateChanged(auth, (user)=>
+      {
+        if(user)
+        {
+          navigate('/dashboard');
+        }
+      });
+
     }, []);
 
   // Function to handle form submission when login is successful

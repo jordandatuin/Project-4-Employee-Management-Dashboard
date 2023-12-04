@@ -2,10 +2,11 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import Pie from './Pie'
 
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, deleteDoc, doc } from "firebase/firestore";
 import firebaseConfig from '../FirebaseConfig';
 
@@ -27,6 +28,27 @@ const PAGE_SIZE = 10;
 // Table component
 function Table({employees, handleEdit}) 
 {
+  
+  let navigate = useNavigate();
+  const auth = getAuth(firebaseConfig);
+
+  useEffect(()=> 
+  {
+    onAuthStateChanged(auth, (user)=>
+    {
+      if(user) 
+      {
+       
+      }
+      
+      else 
+      {
+        navigate("/");
+      }
+    });
+
+}, [])
+
 
   const handleRowClick = (employee) => 
   {

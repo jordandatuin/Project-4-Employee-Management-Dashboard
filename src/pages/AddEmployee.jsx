@@ -1,22 +1,40 @@
 // Importing necessary modules and components
 import { useState,useEffect  } from 'react'
+import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 import { getFirestore, doc, setDoc, Timestamp } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import firebaseConfig from '../FirebaseConfig';
 
 
 function AddEmployee ({employees, setEmployees})
 { 
 
-    // Set the document title
-    useEffect(() => 
+  let navigate = useNavigate();
+  const auth = getAuth(firebaseConfig);
+
+  useEffect(()=> 
+  {
+    document.title = `Register New Employee`;
+
+    onAuthStateChanged(auth, (user)=>
     {
-      document.title = `Register New Employee`;
-    },[]);
-    
+      if(user) 
+      {
+       
+      }
+      
+      else 
+      {
+        navigate("/");
+      }
+    });
+
+  }, [])
+
 
     // State for managing the employee data
     const [employee, setEmployee] = useState 

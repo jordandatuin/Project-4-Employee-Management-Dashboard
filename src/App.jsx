@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
 import { getFirestore, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import firebaseConfig from './FirebaseConfig';
 
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -13,7 +12,6 @@ import 'bootstrap/dist/js/bootstrap.js';
 // Importing components
 import Login from "./Login";
 import CreateAccount from "./CreateAccount";
-import NotLogin from "./pages/NotLogin.jsx";
 import Layout from "./pages/Layout.jsx";
 import Table from "./pages/Table.jsx";
 import AddEmployee from "./pages/AddEmployee.jsx";
@@ -26,7 +24,6 @@ function App()
   // State for managing employee data
   const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [user, setUser] = useState(null);
 
   // Effect to fetch data when component mounts
   useEffect(() => 
@@ -80,49 +77,22 @@ function App()
     console.log(employee);
   };
 
-  // Initializing authentication object
-  const auth = getAuth(firebaseConfig);
-
-  // Effect to listen for authentication state changes
-  useEffect(() => 
-  {
-    const unsubscribe = onAuthStateChanged(auth, (user) => 
-    {
-      setUser(user);
-    });
-
-    // Cleaning up the subscription when the component unmounts
-    return () => unsubscribe();
-  }, [auth]);
-
   // Render the component
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/createaccount" element={<CreateAccount />} />
-
-        {user ? (
-          // If the user is logged in
-          <>
-            <Route path="/" element={<Layout />}>
-              {/* Nested routes for Dashboard, AddEmployee, EditEmployee */}
-              <Route path="/dashboard" element={<Table employees={employees} setEmployees={setEmployees} handleEdit={handleEdit} />} />
-              <Route path="/addemployee" element={<AddEmployee employees={employees} setEmployees={setEmployees} />} />
-              <Route path="/editemployee" element={<EditEmployee employees={employees} selectedEmployee={selectedEmployee} setEmployees={setEmployees} />} />
-            </Route>
-            {/* Route for handling 404 (Not Found) */}
-            <Route path="*" element={<NotFound />} />
-          </>
-        ) : (
-          <>
-           // If the user is not logged in
-            <Route index element={<Login />} />
-            {/* Route for user not login */}
-            <Route path="*" element={<NotLogin />} />
-          </>
-        )}
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Login />} />
+          <Route path="/createaccount" element={<CreateAccount />} />
+          <Route path="/" element={<Layout />}>
+          {/* Nested routes for Dashboard, AddEmployee, EditEmployee */}
+          <Route path="/dashboard" element={<Table employees={employees} setEmployees={setEmployees} handleEdit={handleEdit} />} />
+          <Route path="/addemployee" element={<AddEmployee employees={employees} setEmployees={setEmployees} />} />
+          <Route path="/editemployee" element={<EditEmployee employees={employees} selectedEmployee={selectedEmployee} setEmployees={setEmployees} />} />
+          </Route>
+          {/* Route for handling 404 (Not Found) */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
   );
 };
 // Exporting the App component as the default export
