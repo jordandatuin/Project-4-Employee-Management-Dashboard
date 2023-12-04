@@ -1,16 +1,35 @@
 // Importing necessary modules and components
 import { useEffect  } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ReactiveButton from 'reactive-button';
 
-// NotFound component
-function NotFound() {
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import firebaseConfig from '../FirebaseConfig';
 
-  // useEffect to set the document title when the component mounts
+// NotFound component
+function NotFound() 
+{
+  let navigate = useNavigate();
+  const auth = getAuth(firebaseConfig);
+
   useEffect(() => 
   {
-    document.title = `Page Not Found - Activity 14`;
-  },[]);
+    document.title = `Page Not Found`;
+
+    onAuthStateChanged(auth, (user)=>
+    {
+      if(user) 
+      {
+       
+      }
+      
+      else 
+      {
+        navigate("/");
+      }
+    });
+
+  }, [])
 
   // Rendering the component
   return (

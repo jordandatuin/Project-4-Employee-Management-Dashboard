@@ -81,8 +81,11 @@ function App()
   return (
       <BrowserRouter>
         <Routes>
+          {/* Route for Login */}
           <Route index element={<Login />} />
+          {/* Route for Create account */}
           <Route path="/createaccount" element={<CreateAccount />} />
+          {/* Route for Layout */}
           <Route path="/" element={<Layout />}>
           {/* Nested routes for Dashboard, AddEmployee, EditEmployee */}
           <Route path="/dashboard" element={<Table employees={employees} setEmployees={setEmployees} handleEdit={handleEdit} />} />
