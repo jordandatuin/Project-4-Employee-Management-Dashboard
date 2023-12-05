@@ -118,7 +118,7 @@ function AddEmployee ({employees, setEmployees})
         date: employee.date,
         gender: employee.gender, 
         position: employee.position,
-        dataCreated: Timestamp.fromDate(new Date())
+        dataCreated: Timestamp.now()
 
       };
       
@@ -316,6 +316,7 @@ return (
             <div className="row">
                 <div className="col d-flex flex-column align-items-center justify-content-center">
                   <button 
+                    type="button"
                     className="btn btn-dark"
                     onClick={add_employee}
                   >

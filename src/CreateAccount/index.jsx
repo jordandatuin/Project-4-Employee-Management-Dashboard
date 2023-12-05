@@ -136,6 +136,7 @@ function CreateAccount ()
               password: '',
           });
 
+           // Navigate to dashboard after creating account
           navigate('/dashboard');
         },
       });
@@ -152,8 +153,6 @@ function CreateAccount ()
           showConfirmButton: true,
           confirmButtonColor: '#860A35',
         });
-
-        
       });
     }
   };
@@ -166,7 +165,7 @@ function CreateAccount ()
           <h1 className="fw-bold mb-3">Create Account</h1>
           <form>
             {/* Input fields for employee information */}
-            <label htmlFor="email"><span className="text-danger">*</span> Email:</label>
+            <label htmlFor="email" className="text-black"><span className="text-danger">*</span> Email:</label>
             <input 
               name="email" 
               id="email" 
@@ -181,7 +180,7 @@ function CreateAccount ()
               />
               <br />
 
-              <label htmlFor="password"><span className="text-danger">*</span> Password:</label>
+              <label htmlFor="password" className="text-black"><span className="text-danger">*</span> Password:</label>
               <div className="password-input-container">
                 <input
                   name="password"
@@ -204,20 +203,19 @@ function CreateAccount ()
                 
               </div>
 
-              <p className="text-black text-center pt-1">
+               <p className="text-black text-center pt-1">
                   <small>Password must be at least 6 characters.</small>
-                </p>
-              
-            <button 
-              
-              className="btn btn-dark me-2"
-              onClick={create_user}
-              
-            >
-              Register
-            </button>
-            Already have an account?
-            <NavLink className="text-dark" to='/'> Sign In.</NavLink>
+              </p>
+                
+              <button 
+                type="button"
+                className="btn bg-black text-white border-0 me-2"
+                onClick={create_user}
+              >
+                Register
+              </button>
+              <span className="text-black">Already have an account? </span>
+              <NavLink className="text-black nounderline" to='/'> Sign In.</NavLink>
           </form>
         </div>
       </div>

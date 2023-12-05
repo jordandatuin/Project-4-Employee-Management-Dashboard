@@ -12,7 +12,7 @@ import LoginCreateBg from '../assets/images/login-create-bg.png'
 
 function Login ()  
 {
-
+  const [form] = Form.useForm();
   const navigate = useNavigate();
 
   // State variables for email and password
@@ -63,8 +63,9 @@ function Login ()
               showConfirmButton: false,
               timer: 1500,
             });
-              setUserEmail('');
-              setUserPassword('');
+              // Reset input fields
+              form.resetFields();
+              // Navigate to dashboard
               navigate('/dashboard');
           },
         });
@@ -73,33 +74,32 @@ function Login ()
       {
         Swal.fire
         ({
-          timer: 1500,
-          showConfirmButton: false,
-          willOpen: () => 
-          {
-            Swal.showLoading();
-          },
-          willClose: () => 
-          {
-            Swal.fire
-            ({
-              allowOutsideClick: false,
-              icon: 'error',
-              title: 'Error!',
-              text: 'Invalid Credentials!',
-              showConfirmButton: true,
-              confirmButtonColor: '#860A35',
-              confirmButtonText: 'Try again',
-            }).then(() =>
+            timer: 1500,
+            showConfirmButton: false,
+            willOpen: () => 
             {
-              console.log("hello")
-              setUserEmail('');
-              setUserPassword('');
-            });
-           
-          },
+                Swal.showLoading();
+            },
+            willClose: () => 
+            {
+              Swal.fire
+              ({
+                  allowOutsideClick: false,
+                  icon: 'error',
+                  title: 'Error!',
+                  text: 'Invalid Credentials!',
+                  showConfirmButton: true,
+                  confirmButtonColor: '#860A35',
+                  confirmButtonText: 'Try again',
+              }).then(() => 
+              {
+                  console.log("hello");
+                  // Reset input fields
+                  form.resetFields();
+              });
+            },
         });
-      });
+    });
   };
   
   // Function to handle form submission when login fails
@@ -110,13 +110,11 @@ function Login ()
     {
         Swal.fire
       ({
-
         icon: 'error',
         title: 'Error!',
         text: 'Please input your email and password',
         showConfirmButton: true,
         confirmButtonColor: '#860A35',
-
       });
     }
   };
@@ -133,6 +131,7 @@ function Login ()
       confirmButtonColor: '#557C55',
       confirmButtonText: 'Send',
     });
+
     if (useremail) 
     {
       Swal.fire(`Email has been sent: ${useremail}`);
@@ -141,18 +140,16 @@ function Login ()
       sendPasswordResetEmail(auth, useremail)
         .then(() => 
         {
-          // Password reset email sent!
-          setUserEmail('');
-          setUserPassword('');
-          
+          // Password reset email sent then clear fields.
+          form.resetFields();
         })
         .catch((error) => 
         {
           const errorCode = error.code;
           const errorMessage = error.message;
         });
-    }
-  }
+    };
+  };
 
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100">
@@ -162,7 +159,7 @@ function Login ()
             <div className="col-sm-3">
             <div className="card p-5 shadow-lg">
               {/* Ant Design Form for user input */}
-              <Form
+              <Form form = {form}
                   name="basic"
                   labelCol=
                       {{
@@ -238,14 +235,14 @@ function Login ()
                           >
                           Sign In
                           </Button>
-                          <span className="ms-2">Or <NavLink to="/createaccount" className="text-dark ms-1">Register now!</NavLink></span>
+                          <span className="ms-2">Or <NavLink to="/createaccount" className="text-black ms-1">Register now!</NavLink></span>
                       </Form.Item>
                       </div>
                     </div>
                   </div>
                   <div className="d-flex align-items-end justify-content-center">
                     <div className="row">
-                      <span><NavLink onClick={forgoPassword} className="text-dark">Forgot password?</NavLink></span>   
+                      <span><NavLink onClick={forgoPassword} className="text-black">Forgot password?</NavLink></span>   
                     </div>
                   </div>
               </Form>

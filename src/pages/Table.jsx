@@ -46,8 +46,7 @@ function Table({employees, handleEdit})
         navigate("/");
       }
     });
-
-}, [])
+  }, [])
 
 
   const handleRowClick = (employee) => 
@@ -58,14 +57,13 @@ function Table({employees, handleEdit})
 
   const [opened, { open, close }] = useDisclosure(false);
 
-
   // State for the current page and records to be displayed
   const [page, setPage] = useState(1);
   const [records, setRecords] = useState(employees.slice(0, PAGE_SIZE));
   const [query, setQuery] = useState('');
   const [debouncedQuery] = useDebouncedValue(query, 200);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [filteredData, setFilteredData] = useState(employees); // Add this state
+  const [filteredData, setFilteredData] = useState(employees);
 
  
   // useEffect to filter records based on the debounced query

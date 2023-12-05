@@ -176,7 +176,7 @@ function EditEmployee ({selectedEmployee, setEmployees})
           date: employee.date,
           gender: employee.gender,
           position: employee.position,
-          dataUpdated: Timestamp.fromDate(new Date())
+          dataUpdated: Timestamp.now()
         };
 
         // Initialize Cloud Firestore and get a reference to the service
@@ -386,6 +386,7 @@ return (
           <div className="row">
             <div className="col d-flex flex-column align-items-center justify-content-center">
               <button
+                type="button"
                 className="btn btn-dark"
                 onClick={edit_employee}
               >

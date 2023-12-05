@@ -1,6 +1,4 @@
 @layer mantine, mantine-datatable;
-
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Roboto:wght@900&display=swap');
 
 /* css for default values. */
@@ -95,8 +93,6 @@
  }
  /* css for not login */
 
-
-
 /* css for login */
 
 .login_text 
@@ -157,19 +153,27 @@
 /* css for card */
 
 /* css for show password */
-.password-input-container {
+.password-input-container 
+{
   position: relative;
 }
 
-.password-toggle {
+.password-toggle 
+{
   position: absolute;
   top: 50%;
-  right: 10px; /* Adjust the value based on your design */
+  right: 10px;
   transform: translateY(-50%);
   cursor: pointer;
 }
-
 /* css for show password */
+
+/* css for Sign in underline */
+.nounderline:hover
+{
+  text-decoration: none !important
+}
+/* css for Sign in underline */
 
 /* media queries */
 @media (max-width: 600px)
