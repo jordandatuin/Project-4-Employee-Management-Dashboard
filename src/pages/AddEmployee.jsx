@@ -5,16 +5,17 @@ import moment from 'moment';
 
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 
-import { getFirestore, doc, setDoc, Timestamp } from "firebase/firestore";
+import { getFirestore, doc, addDoc, updateDoc, Timestamp, collection } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import firebaseConfig from '../FirebaseConfig';
 
 
-function AddEmployee ({employees, setEmployees})
+function AddEmployee ()
 { 
 
   let navigate = useNavigate();
   const auth = getAuth(firebaseConfig);
+  const db = getFirestore(firebaseConfig);
 
   useEffect(()=> 
   {
@@ -51,7 +52,7 @@ function AddEmployee ({employees, setEmployees})
 
     
     // Function to handle adding a new employee
-    const add_employee = e => 
+    const add_employee = async (e) => 
     {
       e.preventDefault();
 
@@ -98,18 +99,9 @@ function AddEmployee ({employees, setEmployees})
           });
         }
 
-
-      // Generate a new employee object with an incremented ID
-      const generateNewId = () => 
-      {
-        const lastEmployee = employees[employees.length - 1];
-        return lastEmployee ? lastEmployee.id + 1 : 1;
-      };
-      
-      const id = generateNewId();
+ 
       const newEmployee = 
       {
-        id,
         firstName: employee.firstName,
         lastName: employee.lastName,
         address: employee.address,
@@ -122,11 +114,13 @@ function AddEmployee ({employees, setEmployees})
 
       };
       
-      // Update the employees array and local storage
-      const db = getFirestore(firebaseConfig);
-      const employeeId = String(id);
-      setDoc(doc(db, 'db-ema', employeeId),newEmployee)
-      setEmployees(newEmployee);
+      const docRef = await addDoc(collection(db, 'db-ema'),newEmployee);
+
+      await updateDoc(doc(db, 'db-ema', docRef.id), 
+      {
+        id: encodeURIComponent(docRef.id),
+      });
+ 
     
       // Clear the form after submitting
       setEmployee

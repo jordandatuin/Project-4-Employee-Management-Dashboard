@@ -1,6 +1,6 @@
 // Importing necessary modules and components
 import { useState,useEffect  } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import withReactContent from 'sweetalert2-react-content';
@@ -11,9 +11,10 @@ import firebaseConfig from '../FirebaseConfig';
 
 
 
-function EditEmployee ({selectedEmployee, setEmployees})
+function EditEmployee ()
 {   
-
+  const db = getFirestore(firebaseConfig);
+  
   // Create a navigate function from react-router-dom
   let navigate = useNavigate();
   const auth = getAuth(firebaseConfig);
@@ -64,6 +65,8 @@ function EditEmployee ({selectedEmployee, setEmployees})
 
   }, [])
 
+  const location = useLocation();
+  const selectedEmployee = location.state?.selectedEmployee || null;
 
   // Initialize the state with the initialEmployeeState
   const initialEmployeeState = selectedEmployee
@@ -180,11 +183,10 @@ function EditEmployee ({selectedEmployee, setEmployees})
         };
 
         // Initialize Cloud Firestore and get a reference to the service
-        const db = getFirestore(firebaseConfig);
-        const accountidString = String(employee.id);
+
+        // const accountidString = String(employee.id);
         // Update the employee data in Firestore
-        updateDoc(doc(db, "db-ema", accountidString),updatedEmployee);
-        setEmployees(updatedEmployee);
+        updateDoc(doc(db, "db-ema", employee.id),updatedEmployee);
 
         // Display a success message using SweetAlert
         const MySwal = withReactContent(Swal);

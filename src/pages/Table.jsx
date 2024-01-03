@@ -7,7 +7,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import Pie from './Pie'
 
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, deleteDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, onSnapshot, query, orderBy,deleteDoc, doc, } from 'firebase/firestore';
 import firebaseConfig from '../FirebaseConfig';
 
 import { DataTable } from 'mantine-datatable';
@@ -26,11 +26,23 @@ import 'mantine-datatable/styles.layer.css';
 const PAGE_SIZE = 10;
 
 // Table component
-function Table({employees, handleEdit}) 
+function Table() 
 {
   
   let navigate = useNavigate();
   const auth = getAuth(firebaseConfig);
+
+    // State for managing employee data
+    const [employees, setEmployees] = useState([]);
+
+    // State for the current page and records to be displayed
+    const [page, setPage] = useState(1);
+    const [records, setRecords] = useState(employees.slice(0, PAGE_SIZE));
+    const [querys, setQuery] = useState('');
+    const [debouncedQuery] = useDebouncedValue(querys, 200);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [filteredData, setFilteredData] = useState(employees);
+
 
   useEffect(()=> 
   {
@@ -48,6 +60,48 @@ function Table({employees, handleEdit})
     });
   }, [])
 
+    // Effect to fetch data when component mounts
+    useEffect(() => 
+    {
+      const fetchData = async () => 
+      {
+        const db = getFirestore(firebaseConfig);
+        try 
+        {
+          // Querying the 'db-ema' collection and ordering by 'id'
+          const q = query(collection(db, 'db-ema'), orderBy('dataCreated'));
+  
+          // Listening for snapshot changes and updating state accordingly
+          onSnapshot(q, (snapshot) => 
+          {
+            const newEmployeeList = [];
+  
+            snapshot.forEach((employee) => 
+            {
+              const tempEmployee = employee.data();
+              tempEmployee['employee_id'] = employee.id;
+              newEmployeeList.push(tempEmployee);
+            });
+  
+            setEmployees(newEmployeeList);
+          });
+        } 
+        // Handling errors and showing a notification
+        catch (e) 
+        {
+          Swal.fire
+          ({
+            icon: 'error',
+            title: 'Could not fetch data!',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          console.error('Error fetching data:', e);
+        }
+      };
+  
+      fetchData();
+    }, []);
 
   const handleRowClick = (employee) => 
   {
@@ -57,15 +111,14 @@ function Table({employees, handleEdit})
 
   const [opened, { open, close }] = useDisclosure(false);
 
-  // State for the current page and records to be displayed
-  const [page, setPage] = useState(1);
-  const [records, setRecords] = useState(employees.slice(0, PAGE_SIZE));
-  const [query, setQuery] = useState('');
-  const [debouncedQuery] = useDebouncedValue(query, 200);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [filteredData, setFilteredData] = useState(employees);
+  // Function to handle editing an employee
+  const handleEdit = id => 
+  {
+    const [employee] = employees.filter(employee => employee.id === id);
 
- 
+    navigate(`/editemployee/${id}`, { state: { selectedEmployee: employee } });
+  };
+
   // useEffect to filter records based on the debounced query
   useEffect(() => 
   {
@@ -172,11 +225,6 @@ function Table({employees, handleEdit})
             records={records}
             noRecordsText="No records to show"
             columns={[
-              { accessor: "id", 
-                width: 50,
-                title:"ID",
-                textAlign: "center",
-              },
               { accessor: "Name",
                 render: ({ firstName, lastName }) => `${firstName} ${lastName}`,
                 width: 300,
@@ -193,11 +241,11 @@ function Table({employees, handleEdit})
                         <IconX size={16} />
                       </ActionIcon>
                     }
-                    value={query}
+                    value={querys}
                     onChange={(e) => setQuery(e.currentTarget.value)}
                   />
                 ),
-                filtering: query !== '',
+                filtering: querys !== '',
               },
               { accessor: "email", 
                 width: 200,
@@ -252,9 +300,13 @@ function Table({employees, handleEdit})
             page={page}
             onPageChange={(p) => setPage(p)}
           />
-          <Modal opened={opened} onClose={() => { close(); setSelectedEmployee(null); }} title="Employee data" size="md" centered>
-          {selectedEmployee && (
+          <Modal opened={opened} onClose={() => { close(); setSelectedEmployee(null); }} size="md" centered>
+          {selectedEmployee && 
+          (
+            <>
+            <h6 className="display-6 text-center">Employee Data</h6>
             <div className="card p-3 m-3">
+              <p>Employee ID: {`${selectedEmployee.id}`}</p>
               <p>First Name: {`${selectedEmployee.firstName}`}</p>
               <p>Last Name: {`${selectedEmployee.lastName}`}</p>
               <p>Gender: {selectedEmployee.gender}</p>
@@ -264,6 +316,7 @@ function Table({employees, handleEdit})
               <p>Salary: {formatter.format(selectedEmployee.salary)}</p>
               <p>Date hired: {selectedEmployee.date}</p>
             </div>
+            </>
           )}
         </Modal>
         </MantineProvider>
