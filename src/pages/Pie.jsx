@@ -23,7 +23,7 @@ function PieChart()
       try 
       {
         // Firestore query to order data by 'id'
-        const q = query(collection(db, 'db-ema'), orderBy('id'));
+        const q = query(collection(db, 'db-ema'), orderBy('dataCreated'));
 
         // Snapshot listener to update state when data changes
         onSnapshot(q, (snapshot) => 

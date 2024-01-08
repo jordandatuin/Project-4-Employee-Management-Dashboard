@@ -13,6 +13,8 @@ import firebaseConfig from '../FirebaseConfig';
 
 function EditEmployee ()
 {   
+  
+  // Initialize Cloud Firestore and get a reference to the service
   const db = getFirestore(firebaseConfig);
   
   // Create a navigate function from react-router-dom
@@ -182,9 +184,6 @@ function EditEmployee ()
           dataUpdated: Timestamp.now()
         };
 
-        // Initialize Cloud Firestore and get a reference to the service
-
-        // const accountidString = String(employee.id);
         // Update the employee data in Firestore
         updateDoc(doc(db, "db-ema", employee.id),updatedEmployee);
 

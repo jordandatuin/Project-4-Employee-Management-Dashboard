@@ -103,21 +103,7 @@ function Table()
       fetchData();
     }, []);
 
-  const handleRowClick = (employee) => 
-  {
-    setSelectedEmployee(employee);
-    open(); // Open the modal
-  };
-
   const [opened, { open, close }] = useDisclosure(false);
-
-  // Function to handle editing an employee
-  const handleEdit = id => 
-  {
-    const [employee] = employees.filter(employee => employee.id === id);
-
-    navigate(`/editemployee/${id}`, { state: { selectedEmployee: employee } });
-  };
 
   // useEffect to filter records based on the debounced query
   useEffect(() => 
@@ -160,6 +146,23 @@ function Table()
     currency: "PHP",
     minimumFractionDigits: null,
   });
+
+  
+  const handleRowClick = (employee) => 
+  {
+    setSelectedEmployee(employee);
+    open(); // Open the modal
+  };
+
+
+
+  // Function to handle editing an employee
+  const handleEdit = id => 
+  {
+    const [employee] = employees.filter(employee => employee.id === id);
+
+    navigate(`/editemployee/${id}`, { state: { selectedEmployee: employee } });
+  };
 
   const handleDelete = id => 
   {
@@ -230,20 +233,22 @@ function Table()
                 width: 300,
                 textAlign: "center", 
                 filter: (
-                  <TextInput
-                    label="Employees"
-                    description="Show employees whose names include the specified text"
-                    placeholder=" Search employees..."
-                    style={{ padding: "8px" }}
-                    rightSection=
-                    {
-                      <ActionIcon size="sm" variant="transparent" c="dimmed" onClick={() => setQuery('')}>
-                        <IconX size={16} />
-                      </ActionIcon>
-                    }
-                    value={querys}
-                    onChange={(e) => setQuery(e.currentTarget.value)}
-                  />
+                  <>
+                    <TextInput
+                      label="Employees"
+                      description="Show employees whose names include the specified text"
+                      placeholder="Search employees..."
+                      className="m-4"
+                      rightSection=
+                      {
+                        <ActionIcon size="sm" variant="transparent" c="dimmed" onClick={() => setQuery('')}>
+                          <IconX size={14} />
+                        </ActionIcon>
+                      }
+                      value={querys}
+                      onChange={(e) => setQuery(e.currentTarget.value)}
+                    />
+                  </>
                 ),
                 filtering: querys !== '',
               },

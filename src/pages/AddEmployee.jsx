@@ -14,9 +14,11 @@ function AddEmployee ()
 { 
 
   let navigate = useNavigate();
-  const auth = getAuth(firebaseConfig);
+ 
+  // Initialize Cloud Firestore and get a reference to the service
   const db = getFirestore(firebaseConfig);
-
+  const auth = getAuth(firebaseConfig);
+  
   useEffect(()=> 
   {
     document.title = `Register New Employee`;
