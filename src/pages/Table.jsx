@@ -11,7 +11,7 @@ import { getFirestore, collection, onSnapshot, query, orderBy,deleteDoc, doc, } 
 import firebaseConfig from '../FirebaseConfig';
 
 import { DataTable } from 'mantine-datatable';
-import { ActionIcon, TextInput, Group, Modal} from '@mantine/core';
+import { ActionIcon, TextInput, Group, Modal, Loader} from '@mantine/core';
 import { useDebouncedValue,useDisclosure  } from '@mantine/hooks';
 import { IconX, IconEdit,IconTrash, IconEye } from "@tabler/icons-react";
 import { MantineProvider } from "@mantine/core";
@@ -30,18 +30,22 @@ function Table()
 {
   
   let navigate = useNavigate();
+
+  // Initialize Cloud Firestore and get a reference to the service
   const auth = getAuth(firebaseConfig);
+  const db = getFirestore(firebaseConfig);
 
-    // State for managing employee data
-    const [employees, setEmployees] = useState([]);
+  // State for managing employee data
+  const [employees, setEmployees] = useState([]);
 
-    // State for the current page and records to be displayed
-    const [page, setPage] = useState(1);
-    const [records, setRecords] = useState(employees.slice(0, PAGE_SIZE));
-    const [querys, setQuery] = useState('');
-    const [debouncedQuery] = useDebouncedValue(querys, 200);
-    const [selectedEmployee, setSelectedEmployee] = useState(null);
-    const [filteredData, setFilteredData] = useState(employees);
+  // State for the current page and records to be displayed
+  const [page, setPage] = useState(1);
+  const [records, setRecords] = useState(employees.slice(0, PAGE_SIZE));
+  const [querys, setQuery] = useState('');
+  const [debouncedQuery] = useDebouncedValue(querys, 200);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [filteredData, setFilteredData] = useState(employees);
+  const [fetching, setFetching] = useState(true);
 
 
   useEffect(()=> 
@@ -65,7 +69,7 @@ function Table()
     {
       const fetchData = async () => 
       {
-        const db = getFirestore(firebaseConfig);
+        setFetching(true);
         try 
         {
           // Querying the 'db-ema' collection and ordering by 'id'
@@ -84,11 +88,13 @@ function Table()
             });
   
             setEmployees(newEmployeeList);
+            setFetching(false);
           });
         } 
         // Handling errors and showing a notification
         catch (e) 
         {
+          setFetching(false);
           Swal.fire
           ({
             icon: 'error',
@@ -216,6 +222,11 @@ function Table()
           <h1 className="display-4 mb-4">Employee List</h1>
         <MantineProvider>
           <DataTable
+            fetching={fetching}
+            loaderType="bars"
+            loaderSize="xl"
+            loaderColor="grey"
+            loaderBackgroundBlur={3}
             borderRadius="sm"
             shadow="xl"
             striped
