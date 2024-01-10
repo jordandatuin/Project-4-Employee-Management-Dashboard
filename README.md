@@ -27,7 +27,7 @@ Employee Management App is a web application designed to streamline the storage 
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/Jordan-Program/Employee-Management-App.git
+    git clone https://github.com/Jordan-Program/Project-4-Employee-Management-Dashboard.git
     ```
 
 2. **Install Dependencies:**
